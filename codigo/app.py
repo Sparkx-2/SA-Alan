@@ -5,7 +5,10 @@ from datetime import datetime
 from urllib.parse import quote
 
 app = Flask(__name__)
-
+"""
+    No momento ele esta usando dicionarios pq queria testa as rotas no 
+    terminal do python. Depois sera incrementado SQL.
+"""
 app.secret_key = "chave_temporaria_123"
 
 usuarios = {}
