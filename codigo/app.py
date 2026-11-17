@@ -88,6 +88,11 @@ def pesquisar():
             "data": datetime.now().strftime("%d/%m/%Y %H:%M")
         })
 
+#  Aqui nesta parte esta sendo utilizado o quote de urllib para 
+#  adicionar o link de plutotv, pois meu site sera uma pagina que ira
+#  redirecionar a pesquisa do usuario para o pluto para que ela possa
+#  assistir o filme ou serie que desejar.
+
         return redirect(
             "https://pluto.tv/search/details?query=" + quote(conteudo)
         )
