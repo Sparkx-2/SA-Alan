@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Nexity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body class="auth-body">
+
+    <main class="auth-page">
+
+        <section class="auth-card">
+
+            <h1>NEXITY</h1>
+            <h2>LOGIN</h2>
+
+            {% with mensagens = get_flashed_messages() %}
+            {% for mensagem in mensagens %}
+            <p class="auth-message">{{ mensagem }}</p>
+            {% endfor %}
+            {% endwith %}
+
+            <form action="/login" method="POST">
+
+                <div class="auth-input">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <span>♟</span>
+                </div>
+
+                <div class="auth-input">
+                    <input type="password" name="senha" placeholder="Senha" required>
+                    <span>🔒</span>
+                </div>
+
+                <button type="submit" class="auth-button">
+                    LOGIN
+                </button>
+
+            </form>
+
+            <div class="auth-links">
+                <a href="/cadastro">Criar conta</a>
+                <a href="/">Voltar ao início</a>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - Nexity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='historico.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Nexity</h1>
+
+        <nav>
+            <a href="/">Início</a>
+            <a href="/buscar_usuarios">Buscar usuários</a>
+            <a href="/historico">Histórico</a>
+            <a href="/perfil/{{ session['username'] }}">Meu perfil</a>
+            <a href="/logout">Sair</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <h2>Histórico de {{ username }}</h2>
+
+        {% with mensagens = get_flashed_messages() %}
+        {% for mensagem in mensagens %}
+        <p class="mensagem">{{ mensagem }}</p>
+        {% endfor %}
+        {% endwith %}
+
+        {% if registros %}
+
+        {% for registro in registros %}
+
+        <section>
+            <h3>{{ registro["conteudo"] }}</h3>
+
+            <p>Pesquisado em: {{ registro["data"] }}</p>
+
+            {% if registro["conteudo"] in avaliacoes %}
+            <p>
+                Sua avaliação:
+                {{ avaliacoes[registro["conteudo"]] }}/5
+            </p>
+            {% else %}
+
+            <form action="/avaliar" method="POST">
+
+                <input type="hidden" name="conteudo" value="{{ registro['conteudo'] }}">
+
+                <label for="nota">Avaliar:</label>
+
+                <select name="nota" id="nota" required>
+                    <option value="">Selecione uma nota</option>
+                    <option value="1">1 estrela</option>
+                    <option value="2">2 estrelas</option>
+                    <option value="3">3 estrelas</option>
+                    <option value="4">4 estrelas</option>
+                    <option value="5">5 estrelas</option>
+                </select>
+
+                <button type="submit">Enviar avaliação</button>
+
+            </form>
+
+            {% endif %}
+
+        </section>
+
+        {% endfor %}
+
+        {% else %}
+
+        <p>Você ainda não pesquisou nenhum filme ou série.</p>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

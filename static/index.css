@@ -1,0 +1,218 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+    background: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: rgba(25, 20, 35, 0.85);
+    min-height: 80px;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(180, 100, 255, 0.2);
+    backdrop-filter: blur(15px);
+}
+
+header h1 {
+    color: #63a0ff;
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #d0c6d8;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #b77aff;
+}
+
+nav p {
+    color: #d0c6d8;
+}
+
+main {
+    width: 100%;
+    padding: 20px;
+}
+
+.inicio {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(ellipse at 90% 35%, rgba(120, 0, 150, 0.35), transparent 35%),
+        radial-gradient(ellipse at 5% 75%, rgba(180, 35, 20, 0.30), transparent 35%),
+        #000;
+}
+
+.central {
+    width: 100%;
+    max-width: 750px;
+    text-align: center;
+}
+
+.central h2 {
+    color: #63a0ff;
+    font-size: 68px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.central p {
+    color: #c4b9cc;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.barra-pesquisa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    background: rgba(180, 180, 180, 0.13);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 25px;
+    backdrop-filter: blur(18px);
+    transition: 0.3s;
+}
+
+.barra-pesquisa:focus-within {
+    border-color: #a66aff;
+    box-shadow: 0 0 18px rgba(180, 80, 255, 0.2);
+}
+
+.barra-pesquisa input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+}
+
+.barra-pesquisa input::placeholder {
+    color: #d0c6d8;
+}
+
+.barra-pesquisa button {
+    padding: 13px 24px;
+    background: linear-gradient(135deg, #6639a8, #2868df);
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.barra-pesquisa button:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 15px rgba(180, 80, 255, 0.4);
+}
+
+.mensagem {
+    margin-top: 20px;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .central h2 {
+        font-size: 48px;
+    }
+
+    .barra-pesquisa {
+        flex-direction: column;
+    }
+
+    .barra-pesquisa input,
+    .barra-pesquisa button {
+        width: 100%;
+    }
+}
+
+/* RESPONSIVIDADE PARA CELULARES */
+@media (max-width: 600px) {
+
+    header {
+        padding: 15px;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    header nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    header nav a {
+        font-size: 14px;
+    }
+
+    .inicio {
+        padding: 20px 15px;
+        min-height: calc(100vh - 150px);
+    }
+
+    .central {
+        width: 100%;
+        padding: 20px 10px;
+    }
+
+    .central h2 {
+        font-size: 30px;
+    }
+
+    .barra-pesquisa {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .barra-pesquisa input {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .barra-pesquisa button {
+        width: 100%;
+        padding: 14px;
+    }
+}

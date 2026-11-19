@@ -1,27 +1,30 @@
 
-from flask import Flask, request, session, redirect
+from flask import Flask, request, session, redirect, render_template, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from urllib.parse import quote
 
-app = Flask(__name__)
-"""
-    No momento ele esta usando dicionarios pq queria testa as rotas no 
-    terminal do python. Depois sera incrementado SQL.
-"""
+app = Flask(__name__, template_folder="../interface", static_folder="../static")
+
 app.secret_key = "chave_temporaria_123"
 
 usuarios = {}
 historicos = {}
 avaliacoes = {}
 
+
+# Página inicial
 @app.route("/")
 def home():
-    return "Hello, World!"
+    return render_template("index.html")
 
+
+# Verifica se existe usuário logado
 def usuario_logado():
     return "username" in session
 
+
+# Cadastro
 @app.route("/cadastro", methods=["GET", "POST"])
 def cadastro():
     if request.method == "POST":
@@ -29,19 +32,24 @@ def cadastro():
         senha = request.form.get("senha", "")
 
         if not username or not senha:
-            return "Preencha todos os campos."
+            flash("Preencha todos os campos.")
+            return redirect(url_for("cadastro"))
 
         if username in usuarios:
-            return "Esse usuário já existe."
+            flash("Esse usuário já existe.")
+            return redirect(url_for("cadastro"))
 
         usuarios[username] = generate_password_hash(senha)
         historicos[username] = []
         avaliacoes[username] = {}
 
-        return "Cadastro realizado com sucesso!"
+        flash("Cadastro realizado com sucesso!")
+        return redirect(url_for("login"))
 
-    return "Página de cadastro"
+    return render_template("cadastro.html")
 
+
+# Login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -49,37 +57,48 @@ def login():
         senha = request.form.get("senha", "")
 
         if not username or not senha:
-            return "Preencha todos os campos."
+            flash("Preencha todos os campos.")
+            return redirect(url_for("login"))
 
         if username not in usuarios:
-            return "Usuário não encontrado."
+            flash("Usuário não encontrado.")
+            return redirect(url_for("login"))
 
         hash_senha = usuarios[username]
 
         if not check_password_hash(hash_senha, senha):
-            return "Senha incorreta."
+            flash("Senha incorreta.")
+            return redirect(url_for("login"))
 
         session["username"] = username
 
-        return "Login realizado com sucesso!"
+        flash("Login realizado com sucesso!")
+        return redirect(url_for("home"))
 
-    return "Página de login"
+    return render_template("login.html")
 
+
+# Logout
 @app.route("/logout")
 def logout():
     session.pop("username", None)
-    return "Você saiu da sua conta."
+    flash("Você saiu da sua conta.")
+    return redirect(url_for("home"))
 
+
+# Pesquisa de filmes e séries
 @app.route("/pesquisar", methods=["GET", "POST"])
 def pesquisar():
     if not usuario_logado():
-        return "Você precisa fazer login primeiro."
+        flash("Você precisa fazer login primeiro.")
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         conteudo = request.form.get("conteudo", "").strip()
 
         if not conteudo:
-            return "Digite o nome de um filme ou série."
+            flash("Digite o nome de um filme ou série.")
+            return redirect(url_for("home"))
 
         username = session["username"]
 
@@ -88,83 +107,114 @@ def pesquisar():
             "data": datetime.now().strftime("%d/%m/%Y %H:%M")
         })
 
-#  Aqui nesta parte esta sendo utilizado o quote de urllib para 
-#  adicionar o link de plutotv, pois meu site sera uma pagina que ira
-#  redirecionar a pesquisa do usuario para o pluto para que ela possa
-#  assistir o filme ou serie que desejar.
-
         return redirect(
             "https://pluto.tv/search/details?query=" + quote(conteudo)
         )
 
-    return "Página de pesquisa"
+    return redirect(url_for("home"))
 
+
+# Histórico
 @app.route("/historico")
 def historico():
     if not usuario_logado():
-        return "Você precisa fazer login."
+        flash("Você precisa fazer login.")
+        return redirect(url_for("login"))
 
     username = session["username"]
-    registros = historicos[username]
 
-    if not registros:
-        return "Seu histórico está vazio."
+    return render_template(
+        "historico.html",
+        username=username,
+        registros=historicos[username],
+        avaliacoes=avaliacoes[username]
+    )
 
-    resultado = f"Histórico de {username}:\n"
 
-    for item in registros:
-        resultado += f"- {item['conteudo']} | {item['data']}\n"
-
-    return resultado
-
+# Avaliação de filmes e séries
 @app.route("/avaliar", methods=["POST"])
 def avaliar():
     if not usuario_logado():
-        return "Você precisa fazer login."
+        flash("Você precisa fazer login.")
+        return redirect(url_for("login"))
 
     username = session["username"]
     conteudo = request.form.get("conteudo", "").strip()
     nota = request.form.get("nota", "").strip()
 
     if not conteudo or not nota:
-        return "Informe o conteúdo e a nota."
+        flash("Informe o conteúdo e a nota.")
+        return redirect(url_for("historico"))
 
     if not any(
         item["conteudo"] == conteudo
         for item in historicos[username]
     ):
-        return "Você precisa pesquisar esse conteúdo antes de avaliá-lo."
+        flash("Você precisa pesquisar esse conteúdo antes de avaliá-lo.")
+        return redirect(url_for("historico"))
 
     try:
         nota = int(nota)
     except ValueError:
-        return "A nota precisa ser um número."
+        flash("A nota precisa ser um número.")
+        return redirect(url_for("historico"))
 
     if nota < 1 or nota > 5:
-        return "A nota deve ser entre 1 e 5."
+        flash("A nota deve ser entre 1 e 5.")
+        return redirect(url_for("historico"))
 
     avaliacoes[username][conteudo] = nota
 
-    return "Avaliação registrada com sucesso!"
+    flash("Avaliação registrada com sucesso!")
+    return redirect(url_for("historico"))
 
+
+# Página de pesquisa de usuários
+@app.route("/buscar_usuarios")
+def pagina_buscar_usuarios():
+    if not usuario_logado():
+        flash("Você precisa fazer login primeiro.")
+        return redirect(url_for("login"))
+
+    return render_template("buscar_usuarios.html")
+
+
+# Processamento da pesquisa de usuários
+@app.route("/buscar_usuario", methods=["POST"])
+def buscar_usuario():
+    if not usuario_logado():
+        flash("Você precisa fazer login primeiro.")
+        return redirect(url_for("login"))
+
+    username = request.form.get("username", "").strip()
+
+    if not username:
+        flash("Digite o nome do usuário.")
+        return redirect(url_for("pagina_buscar_usuarios"))
+
+    if username not in usuarios:
+        flash("Usuário não encontrado.")
+        return redirect(url_for("pagina_buscar_usuarios"))
+
+    return redirect(url_for("perfil", username=username))
+
+
+# Perfil público
 @app.route("/perfil/<username>")
 def perfil(username):
     if username not in usuarios:
-        return "Usuário não encontrado."
+        return "Usuário não encontrado.", 404
 
-    resultado = f"Perfil de {username}\n"
-    resultado += "\nHistórico:\n"
+    return render_template(
+        "perfil.html",
+        username=username,
+        registros=historicos[username],
+        avaliacoes=avaliacoes[username]
+    )
 
-    for item in historicos[username]:
-        conteudo = item["conteudo"]
-        nota = avaliacoes[username].get(
-            conteudo,
-            "Sem avaliação"
-        )
-
-        resultado += f"- {conteudo} | Nota: {nota}\n"
-
-    return resultado
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("\nROTAS REGISTRADAS:")
+    print(app.url_map)
+
+    app.run(debug=True, use_reloader=False)

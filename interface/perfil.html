@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de {{ username }} - Nexity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='perfil.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Nexity</h1>
+
+        <nav>
+            <a href="/">Início</a>
+
+            {% if "username" in session %}
+            <a href="/buscar_usuarios">Buscar usuários</a>
+            <a href="/historico">Histórico</a>
+            <a href="/perfil/{{ session['username'] }}">Meu perfil</a>
+            <a href="/logout">Sair</a>
+            {% else %}
+            <a href="/login">Entrar</a>
+            <a href="/cadastro">Cadastrar</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Perfil de {{ username }}</h2>
+            <p>Bem-vindo ao perfil de {{ username }}!</p>
+        </section>
+
+        <section>
+            <h2>Histórico de atividades</h2>
+
+            {% if registros %}
+
+            {% for registro in registros %}
+
+            <article>
+                <h3>{{ registro["conteudo"] }}</h3>
+
+                <p>
+                    Pesquisado em: {{ registro["data"] }}
+                </p>
+
+                {% if registro["conteudo"] in avaliacoes %}
+                <p>
+                    Avaliação:
+                    {{ avaliacoes[registro["conteudo"]] }}/5
+                    estrelas
+                </p>
+                {% else %}
+                <p>Sem avaliação.</p>
+                {% endif %}
+
+            </article>
+
+            {% endfor %}
+
+            {% else %}
+
+            <p>Este usuário ainda não possui atividades.</p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

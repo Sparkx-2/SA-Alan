@@ -1,0 +1,123 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 90% 20%, rgba(120, 0, 150, 0.25), transparent 35%),
+        radial-gradient(ellipse at 5% 80%, rgba(180, 35, 20, 0.20), transparent 35%),
+        #000;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: rgba(25, 20, 35, 0.85);
+    min-height: 80px;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(180, 100, 255, 0.2);
+    backdrop-filter: blur(15px);
+}
+
+header h1 {
+    color: #63a0ff;
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #d0c6d8;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #b77aff;
+}
+
+main {
+    width: 100%;
+    max-width: 1000px;
+    margin: 45px auto;
+    padding: 20px;
+}
+
+main section {
+    background: rgba(180, 180, 180, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 30px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(15px);
+}
+
+main section h2 {
+    color: #63a0ff;
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+main section > p {
+    color: #d0c6d8;
+    line-height: 1.6;
+}
+
+main article {
+    background: rgba(30, 20, 45, 0.65);
+    border: 1px solid rgba(180, 100, 255, 0.25);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 18px;
+}
+
+main article h3 {
+    color: #b77aff;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+main article p {
+    color: #d0c6d8;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    main {
+        margin: 20px auto;
+    }
+
+    main section {
+        padding: 20px;
+    }
+}

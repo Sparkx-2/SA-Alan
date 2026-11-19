@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Nexity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cadastro.css') }}">
+</head>
+
+<body class="auth-body">
+
+    <main class="auth-page">
+
+        <section class="auth-card">
+
+            <h1>NEXITY</h1>
+            <h2>CRIAR CONTA</h2>
+
+            {% with mensagens = get_flashed_messages() %}
+            {% for mensagem in mensagens %}
+            <p class="auth-message">{{ mensagem }}</p>
+            {% endfor %}
+            {% endwith %}
+
+            <form action="/cadastro" method="POST">
+
+                <div class="auth-input">
+                    <input type="text" name="username" placeholder="Escolha um username" required>
+                    <span>♟</span>
+                </div>
+
+                <div class="auth-input">
+                    <input type="password" name="senha" placeholder="Crie uma senha" required>
+                    <span>🔒</span>
+                </div>
+
+                <button type="submit" class="auth-button">
+                    CADASTRAR
+                </button>
+
+            </form>
+
+            <div class="auth-links">
+                <a href="/login">Já tenho uma conta</a>
+                <a href="/">Voltar ao início</a>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

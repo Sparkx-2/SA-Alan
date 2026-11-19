@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexity - Sua plataforma de entretenimento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Nexity</h1>
+
+        <nav>
+            <a href="/">Início</a>
+
+            {% if "username" in session %}
+
+            <p>Bem-vindo, {{ session["username"] }}!</p>
+
+            <a href="/buscar_usuarios">Buscar usuários</a>
+            <a href="/historico">Histórico</a>
+            <a href="/perfil/{{ session['username'] }}">Meu perfil</a>
+            <a href="/logout">Sair</a>
+
+            {% else %}
+
+            <a href="/login">Entrar</a>
+            <a href="/cadastro">Cadastrar</a>
+
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="inicio">
+
+        <section class="central">
+
+            <h2></h2>
+
+            <p>Encontre seu próximo entretenimento.</p>
+
+            <!-- Pesquisa de filmes e séries -->
+            <form action="/pesquisar" method="POST" class="barra-pesquisa">
+
+                <input type="text" name="conteudo" placeholder="Pesquise seu filme ou série favorito" required>
+
+                <button type="submit">Pesquisar</button>
+
+            </form>
+
+            {% with mensagens = get_flashed_messages() %}
+
+            {% for mensagem in mensagens %}
+
+            <p class="mensagem">{{ mensagem }}</p>
+
+            {% endfor %}
+
+            {% endwith %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

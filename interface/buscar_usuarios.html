@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar usuários - Nexity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buscar_usuarios.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Nexity</h1>
+
+        <nav>
+            <a href="/">Início</a>
+            <a href="/buscar_usuarios">Buscar usuários</a>
+            <a href="/historico">Histórico</a>
+            <a href="/perfil/{{ session['username'] }}">Meu perfil</a>
+            <a href="/logout">Sair</a>
+        </nav>
+    </header>
+
+    <main class="busca-usuarios">
+
+        <section class="central">
+
+            <h2>Encontrar usuários</h2>
+            <p>Pesquise e descubra outros perfis do Nexity.</p>
+
+            <form action="/buscar_usuario" method="POST" class="barra-pesquisa">
+
+                <input type="text" name="username" placeholder="Digite o nome do usuário" required>
+
+                <button type="submit">Buscar perfil</button>
+
+            </form>
+
+            {% with mensagens = get_flashed_messages() %}
+            {% for mensagem in mensagens %}
+            <p class="mensagem">{{ mensagem }}</p>
+            {% endfor %}
+            {% endwith %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
