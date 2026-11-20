@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resultados da pesquisa | Nexity</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a1020;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .cabecalho {
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            color: #5685ff;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .descricao {
+            color: #aab5cc;
+            line-height: 1.6;
+        }
+
+        .pesquisa {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .lista-resultados {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .resultado {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: #141e35;
+            border: 1px solid #263657;
+            border-radius: 12px;
+            padding: 22px;
+            transition: 0.2s;
+        }
+
+        .resultado:hover {
+            border-color: #5685ff;
+            transform: translateY(-2px);
+        }
+
+        .informacoes {
+            min-width: 0;
+        }
+
+        .nome {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .tipo {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #263d70;
+            color: #bcd0ff;
+            font-size: 12px;
+        }
+
+        .botao {
+            flex-shrink: 0;
+            background: #3869e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .botao:hover {
+            background: #5685ff;
+        }
+
+        .voltar {
+            display: inline-block;
+            margin-top: 30px;
+            color: #8eafff;
+            text-decoration: none;
+        }
+
+        .voltar:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 25px 15px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+
+            .resultado {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .botao {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <header class="cabecalho">
+
+            <div class="logo">NEXITY</div>
+
+            <h1>Resultados encontrados</h1>
+
+            <p class="descricao">
+                Encontramos mais de um resultado para
+                <span class="pesquisa">{{ pesquisa }}</span>.
+                Escolha o conteudo que deseja assistir.
+            </p>
+
+        </header>
+
+        <section class="lista-resultados">
+
+            {% for resultado in resultados %}
+
+                <article class="resultado">
+
+                    <div class="informacoes">
+
+                        <h2 class="nome">
+                            {{ resultado.nome }}
+                        </h2>
+
+                        {% if resultado.tipo == "movie" %}
+                            <span class="tipo">Filme</span>
+                        {% else %}
+                            <span class="tipo">Serie</span>
+                        {% endif %}
+
+                    </div>
+
+                    <form
+                        action="{{ url_for('selecionar_conteudo') }}"
+                        method="POST"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="indice"
+                            value="{{ loop.index0 }}"
+                        >
+
+                        <button type="submit" class="botao">
+                            Assistir
+                        </button>
+
+                    </form>
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+
+        <a href="{{ url_for('home') }}" class="voltar">
+            Voltar para a pagina inicial
+        </a>
+
+    </main>
+
+</body>
+</html>
