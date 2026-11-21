@@ -1,14 +1,17 @@
-# Arquivos e configurações locais
-__pycache__/
-*.py[cod]
-.venv/
-venv/
+
+# Credenciais e configuracoes privadas
 .env
-.env.*
-!.env.example
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-*.sqlite3
+conexao_neon.txt
+
+# Bancos de dados locais
 *.db
+*.sqlite
+*.sqlite3
+
+# Arquivos temporarios Python
+__pycache__/
+*.pyc
+
+# Ambientes virtuais
+venv/
+.venv/
